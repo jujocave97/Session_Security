@@ -4,7 +4,10 @@ import com.es.seguridadsession.dto.UsuarioDTO;
 import com.es.seguridadsession.dto.UsuarioInsertDTO;
 
 import com.es.seguridadsession.service.UsuarioService;
+import com.es.seguridadsession.utils.Crypter;
+import com.es.seguridadsession.utils.TokenUtil;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,9 +48,39 @@ public class UsuarioController {
     // INSERT
     @PostMapping("/")
     public ResponseEntity<UsuarioInsertDTO> insert(
-            @RequestBody UsuarioInsertDTO nuevoUser
+            @RequestBody UsuarioInsertDTO nuevoUser,
+            HttpServletRequest request
     ) {
-        return null;
+
+        if(nuevoUser == null){
+            // throw exception
+        }
+
+        String token = "";
+        for(Cookie cookie : request.getCookies()){
+            if(cookie.getName().equals("tokenSession")){
+                token = cookie.getValue();
+                break;
+            }
+        }
+
+        String decrypt= "";
+        try {
+            decrypt = TokenUtil.decrypt(token);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        String[] decrypter = decrypt.split(":");
+        String nombreUsuario = decrypter[0];
+
+
+        UsuarioInsertDTO uInsert =  usuarioService.insert(nombreUsuario,nuevoUser);
+        if (uInsert == null){
+            // throw exception
+        }
+
+        return new ResponseEntity<>(uInsert, HttpStatus.OK);
     }
 
 }

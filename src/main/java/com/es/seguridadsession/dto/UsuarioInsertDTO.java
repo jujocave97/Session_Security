@@ -5,11 +5,13 @@ public class UsuarioInsertDTO {
     private String nombre;
     private String password1;
     private String password2;
+    private Boolean admin;
 
-    public UsuarioInsertDTO(String nombre, String password1, String password2) {
+    public UsuarioInsertDTO(String nombre, String password1, String password2, boolean admin) {
         this.nombre = nombre;
         this.password1 = password1;
         this.password2 = password2;
+        this.admin = admin;
     }
 
     public UsuarioInsertDTO(){}
@@ -36,5 +38,13 @@ public class UsuarioInsertDTO {
 
     public void setPassword2(String password2) {
         this.password2 = password2;
+    }
+
+    public Boolean getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
     }
 }
