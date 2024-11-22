@@ -25,6 +25,7 @@ public class SessionService {
         LocalDateTime ahora = LocalDateTime.now();
         if(ahora.isAfter(s.getExpirationDate())) {
             // LANZO UNA EXCEPCION
+            throw new RuntimeException();
         }
 
         return true;

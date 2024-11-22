@@ -3,6 +3,7 @@ package com.es.seguridadsession.controller;
 import com.es.seguridadsession.dto.UsuarioDTO;
 import com.es.seguridadsession.dto.UsuarioInsertDTO;
 
+import com.es.seguridadsession.service.SessionService;
 import com.es.seguridadsession.service.UsuarioService;
 import com.es.seguridadsession.utils.Crypter;
 import com.es.seguridadsession.utils.TokenUtil;
@@ -20,6 +21,8 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+    @Autowired
+    private SessionService sessionService;
 
     // CR
     // LOGIN
@@ -62,6 +65,11 @@ public class UsuarioController {
                 token = cookie.getValue();
                 break;
             }
+        }
+
+        // comprobar si el token es valido
+        if(!sessionService.checkToken(token)){
+            throw new RuntimeException();
         }
 
         String decrypt= "";
